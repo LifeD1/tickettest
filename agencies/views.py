@@ -116,11 +116,11 @@ def listBus(request):
 
 def addDrivers(request):
     if request.method == 'POST':
-        agency_id = request.user.agency
+        user_agency = request.user.agency
         form = AddDriverForm(request.POST)
         if form.is_valid():
             driver = form.save(commit=False)
-            driver.agency = agency_id
+            driver.agency = user_agency
             driver.save()
             return redirect('list-drivers')
     else:
@@ -135,13 +135,18 @@ def listDrivers(request):
     return render(request, 'agencies/list_drivers.html', context)
 
 def addTrip(request):
+    user_agency = request.user.agency
     if request.method == 'POST':
         form = AddTripForm(request.POST)
         if form.is_valid():
-            form.save()
+            trip = form.save(commit=False)
+            trip.agency = user_agency
+            trip.save()
     else:
         form = AddTripForm()
     context = {'form':form}
+    form.fields['branch'].queryset = Branche.objects.filter(agency=request.user.agency)
+    form.fields['bus'].queryset = Bus.objects.filter(agency=request.user.agency)
     return render(request, 'agencies/add_trip.html', context)
 
 def listTrip(request):    

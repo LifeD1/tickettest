@@ -37,7 +37,7 @@ class Driver(models.Model):
     phone = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.first_name
+        return self.first_name +" " + self.last_name
 
 
 class Trip(models.Model):
@@ -49,7 +49,10 @@ class Trip(models.Model):
     from_origin = models.CharField(max_length=150)
     to_destination = models.CharField(max_length=150)
     date = models.DateTimeField(auto_now_add=True) 
-    departure_time = models.DateTimeField()  #to be set by admin need to remove auto now add
-    arrival_time = models.DateTimeField() #to be set by admin need to remove auto now add
+    departure_time = models.DateTimeField(null=True)  #to be set by admin need to remove auto now add
+    arrival_time = models.DateTimeField(null= True, blank = True) #to be set by admin need to remove auto now add
     trip_cost = models.CharField(max_length=20)
     bus_type = models.CharField(max_length=20)
+
+    # def __str__(self):
+    #     return self.trip_id

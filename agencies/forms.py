@@ -54,7 +54,14 @@ class AddDriverForm(ModelForm):
         fields = '__all__'
         exclude = ('agency',)
 
+
 class AddTripForm(ModelForm):
     class Meta:
         model = Trip
         fields = '__all__'
+        exclude = ('agency',)
+
+        widgets = {
+            'departure_time':forms.TextInput(attrs={'type':'datetime-local'}),
+            'arrival_time':forms.TextInput(attrs={'type':'datetime-local'}),
+        }
