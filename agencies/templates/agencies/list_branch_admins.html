@@ -1,0 +1,50 @@
+{% extends 'agencies/index.html' %}
+
+{% block title %} List Branch Admin {% endblock %}
+
+
+{% block content %}
+
+<div class="mx-auto" style="width: 800px;">
+<h2>List Branch Admin</h2>
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Branch</th>
+        <th scope="col">Town</th>
+        <th scope="col">Admins</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for branch in branches %}
+        <!-- {{agency.id}} -->
+        <tr>
+            
+            {% if branch.agency == request.user.agency %}
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{branch.name}}</td>
+            <td>{{branch.town}}</td>
+
+                {%for a in bAdmin %}
+                
+                    {% if a.branch == branch %}
+                        <td>{{ a.first_name }} {{ a.last_name }}</td>
+                    {% endif %}
+
+                {% endfor%}
+            {% endif %}
+        </tr>
+        {% endfor %}
+      
+    </tbody>
+  </table>
+
+    
+</div>
+
+
+
+
+{% endblock %}

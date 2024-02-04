@@ -1,0 +1,23 @@
+{% extends 'sub_admins/index.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Add Agency {% endblock %}
+
+
+{% block content %}
+
+<div class="mx-auto" style="width: 600px;">
+<h2>Add Agnecy</h2>
+
+    <form action="" method="POST">
+
+        {% csrf_token %}
+        {{form|crispy}}
+        <input type="submit" name="Submit">
+    </form>
+</div>
+
+
+
+
+{% endblock %}

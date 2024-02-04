@@ -1,0 +1,47 @@
+{% extends 'agencies/index.html' %}
+
+{% block title %} List of Drivers {% endblock %}
+
+
+{% block content %}
+
+<div class="mx-auto" style="width: 800px;">
+
+<h2>List of Drivers</h2>
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Gender</th>
+        <th scope="col">Contact</th>
+        <th scope="col">ID Num</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for driver in drivers %}
+        <!-- {{agency.id}} -->
+        <tr>
+            
+            {% if driver.agency == request.user.agency %}
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{driver.first_name}} {{driver.last_name}}</td>
+                <td>{{driver.gender}}</td>
+                <td>{{driver.phone}}</td>
+                <td>{{driver.id_card}}</td>
+
+            {% endif %}
+        </tr>
+        {% endfor %}
+      
+    </tbody>
+  </table>
+
+    
+</div>
+
+
+
+
+{% endblock %}

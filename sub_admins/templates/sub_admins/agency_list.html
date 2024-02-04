@@ -1,0 +1,48 @@
+{% extends 'sub_admins/index.html' %}
+
+{% block title %} Agency List {% endblock %}
+
+
+{% block content %}
+
+<div class="mx-auto" style="width: 800px;">
+<h2>Agency List</h2>
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Agency</th>
+        <th scope="col">Reg Number</th>
+        <th scope="col">Admin</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for agency in agencies %}
+        <!-- {{agency.id}} -->
+        <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            
+            <td>{{agency.name}}</td>
+            <td>{{agency.reg_num}}</td>
+
+            {%for a in agencyAdmin %}
+
+                {% if a.agency_id == agency %}
+                    <td>{{ a.username }}</td>
+                {% endif %}
+
+            {% endfor%}
+        </tr>
+        {% endfor %}
+      
+    </tbody>
+  </table>
+
+    
+</div>
+
+
+
+
+{% endblock %}

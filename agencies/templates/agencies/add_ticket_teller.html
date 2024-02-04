@@ -1,0 +1,25 @@
+{% extends 'agencies/index.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Add Ticket Teller {% endblock %}
+
+
+{% block content %}
+
+<div class="mx-auto" style="width: 600px;">
+<h2>Add Ticket Teller</h2>
+
+    <form action="" method="POST">
+
+        {% csrf_token %}
+        {{form|crispy}}
+        <!-- <input type="text" class="form-control" value="{{request.user.agency}}" disabled >
+        <br><br> -->
+        <input type="submit" name="Submit">
+    </form>
+</div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'agencies/index.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Add Trip {% endblock %}
+
+
+{% block content %}
+
+<div class="mx-auto" style="width: 600px;">
+<h2>Add Trip</h2>
+
+    <form action="" method="POST">
+
+        {% csrf_token %}
+        {{form|crispy}}
+        
+        <br><br>
+        <input type="submit" name="Submit">
+    </form>
+</div>
+
+
+
+
+{% endblock %}

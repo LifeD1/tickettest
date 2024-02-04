@@ -1,0 +1,54 @@
+{% extends 'agencies/index.html' %}
+
+{% block title %} List Buses {% endblock %}
+
+
+{% block content %}
+
+<div class="mx-auto" style="width: 800px;">
+<h2>List Buses Layout</h2>
+    <ul class="list-group mb-4">
+        {% for layout in buslayouts%}
+        <li class="list-group-item">{{layout.layout}}</li>
+        {% endfor %}
+    </ul>
+
+
+<h2>List Buses</h2>
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Bus number</th>
+        <th scope="col">Bus layout</th>
+        <th scope="col">Type</th>
+        <th scope="col">Number of seats</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for bus in buses %}
+        <!-- {{agency.id}} -->
+        <tr>
+            
+            {% if bus.agency == request.user.agency %}
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{bus.bus_number}}</td>
+            <td>{{bus.bus_layout}}</td>
+            <td>{{bus.bus_type}}</td>
+            <td>{{bus.numb_seats}}</td>
+
+            {% endif %}
+        </tr>
+        {% endfor %}
+      
+    </tbody>
+  </table>
+
+    
+</div>
+
+
+
+
+{% endblock %}

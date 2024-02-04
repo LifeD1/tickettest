@@ -1,0 +1,50 @@
+{% extends 'agencies/index.html' %}
+
+{% block title %} List Ticket Teller {% endblock %}
+
+
+{% block content %}
+
+<div class="mx-auto" style="width: 800px;">
+<h2>List Ticket Teller</h2>
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Branch</th>
+        <th scope="col">Town</th>
+        <th scope="col">Teller</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for branch in branches %}
+        <!-- {{agency.id}} -->
+        <tr>
+            
+            {% if branch.agency == request.user.agency %}
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{branch.name}}</td>
+            <td>{{branch.town}}</td>
+
+                {%for teller in tellers %}
+                
+                    {% if teller.branch == branch %}
+                        <td>{{ teller.first_name }} {{ teller.last_name }}</td>
+                    {% endif %}
+
+                {% endfor%}
+            {% endif %}
+        </tr>
+        {% endfor %}
+      
+    </tbody>
+  </table>
+
+    
+</div>
+
+
+
+
+{% endblock %}
