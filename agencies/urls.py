@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 from . import views
 
 urlpatterns = [
@@ -14,4 +14,5 @@ urlpatterns = [
     path('add-driver', views.addDrivers, name='add-driver'),
     path('list-drivers', views.listDrivers, name='list-drivers'),
     path('add-trip', views.addTrip, name='add-trip'),
+    # path('customers/', include(('customers.urls', 'customers'), namespace='customers') ),
 ]

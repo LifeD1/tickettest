@@ -15,10 +15,12 @@
         } */
     </style>
     
-    <!-- <a href="{% url 'customers:logout' %}">Logout</a> -->
-    <h1>Nothing to say</h1>
-    <a href="{% url 'add-agency' %}">Add Agency</a> <br>
-    <a href="{% url 'add-agency-admin' %}">Add Agency Admin</a>
+    <a href="{% url 'logout' %}">Logout</a>
+    <h1>Customers Dashboard</h1>
+    <a href="{% url 'add-branch' %}">...</a> <br>
+    
+
+    <!-- {# <a href="{% url 'add-branch-admin' %}">Add Branch Admin</a> #} -->
     
     <div class="container">
         {% block content%}

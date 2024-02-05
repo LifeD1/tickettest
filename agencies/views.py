@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from agencies.forms import AddBrandAdminForm, AddBrandForm, AddBusLayoutForm, AddDriverForm, AddTellerForm, AddTripForm
-from agencies.models import Bus, Bus_layout, Driver
+from agencies.forms import AddBrandAdminForm, AddBrandForm, AddBusForm, AddBusLayoutForm, AddDriverForm, AddTellerForm, AddTripForm
+from agencies.models import Bus, Bus_layout, Driver, Trip
 from sub_admins.models import Agency, Branche, User
 from django.contrib.auth.models import Group
 
@@ -93,12 +93,12 @@ def createBusLayout(request):
 
 def createBus(request):
     if request.method == 'POST':
-        form = AddBusLayoutForm(request.POST)
+        form = AddBusForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('list-buses')
     else:
-        form = AddBusLayoutForm()
+        form = AddBusForm()
     context = {'form':form}
     return render(request, 'agencies/add_bus.html', context)
 
@@ -150,6 +150,6 @@ def addTrip(request):
     return render(request, 'agencies/add_trip.html', context)
 
 def listTrip(request):    
-    form = AddTripForm()
-    context = {'form':form}
+    trips = Trip.objects.all()
+    context = {'trips':trips}
     return render(request, 'agencies/list_trip.html', context)

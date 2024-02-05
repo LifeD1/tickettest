@@ -14,11 +14,16 @@
             align-items: center;
         } */
     </style>
+    {% if user.is_authenticated %}
+    <h2>Logged in as {{user.username}}</h2>
+    <a href="{% url 'logout' %}">Logout</a>
+    {% endif %}
     
-    <!-- <a href="{% url 'customers:logout' %}">Logout</a> -->
-    <h1>Nothing to say</h1>
-    <a href="{% url 'add-agency' %}">Add Agency</a> <br>
-    <a href="{% url 'add-agency-admin' %}">Add Agency Admin</a>
+    <h1>Nothing to say on Customers</h1>
+    <a href="{% url 'add-branch' %}">...</a> <br>
+    
+
+    <!-- {# <a href="{% url 'add-branch-admin' %}">Add Branch Admin</a> #} -->
     
     <div class="container">
         {% block content%}
