@@ -1,0 +1,48 @@
+
+{% extends 'index.html' %}
+
+{% block title %} List Branch Admin {% endblock %}
+
+
+{% block content %}
+<style>
+  .table-striped>tbody>tr:nth-child(odd)>td, 
+  .table-striped>tbody>tr:nth-child(odd)>th {
+      background-color: rgba(119, 255, 85, .5); 
+    }
+</style>
+<div class="row col-8 mx-auto m-5">
+<h1>List Branch Admin</h1>
+
+
+<table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Branch</th>
+        <th scope="col">Town</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for branch in branches %}
+        <!-- {{agency.id}} -->
+        <tr>
+            
+            {% if branch.agency == request.user.agency %}
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{branch.name}}</td>
+            <td>{{branch.town}}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+      
+    </tbody>
+  </table>
+
+    
+</div>
+
+
+
+
+{% endblock %}

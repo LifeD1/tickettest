@@ -1,14 +1,29 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from agencies.forms import AddBrandAdminForm, AddBrandForm, AddBusForm, AddBusLayoutForm, AddDriverForm, AddTellerForm, AddTripForm
 from agencies.models import Bus, Bus_layout, Driver, Trip
 from sub_admins.models import Agency, Branche, User
 from django.contrib.auth.models import Group
+from django.contrib.auth.decorators import user_passes_test, login_required
 
 # Create your views here.
 def home(request):
-    return render(request, 'agencies/index.html')
+    return render(request, 'agencies/branch_admins_dashboard.html')
 
+def restricted(request):
+    return render(request, 'agencies/restricted.html')
+# @user_passes_test(user.groups == '')
+def group_check(user):
+    # if user.groups.filter(name='agency_admins').exists():
+    #     return user.groups =="agency_admins"
+    # else:
+    #     return HttpResponse("You are not authorized to view this page.", status=403)
+    if user.groups.filter(name='agency_admins').exists():
+        print(user.groups)
+        return True
 
+@login_required
+@user_passes_test(group_check, login_url='not_authorized')  
 def createAgencyBranch(request):
     uagency = request.user.agency
     # print(agency)
@@ -48,10 +63,16 @@ def createAgencyBranchAdmin(request):
 
 
 def listBranchAdmin(request):
-    bAdmin = User.objects.all()
+    bAdmin = User.objects.filter(groups__name='branch_admins')
     branches = Branche.objects.all()
     context = {'bAdmin':bAdmin, 'branches':branches}
     return render(request, 'agencies/list_branch_admins.html', context)
+
+def listBranch(request):
+    # bAdmin = User.objects.all()
+    branches = Branche.objects.all()
+    context = { 'branches':branches}
+    return render(request, 'agencies/list_branches.html', context)
 
 
 def createTicketTeller(request):
@@ -73,7 +94,7 @@ def createTicketTeller(request):
     return render(request, 'agencies/add_ticket_teller.html', context)
 
 def listTicketTeller(request):
-    tellers = User.objects.all()
+    tellers = User.objects.filter(groups__name='ticket_tellers')
     branches = Branche.objects.all()
     context = {'tellers':tellers, 'branches':branches}
     return render(request, 'agencies/list_tellers.html', context)
@@ -152,4 +173,4 @@ def addTrip(request):
 def listTrip(request):    
     trips = Trip.objects.all()
     context = {'trips':trips}
-    return render(request, 'agencies/list_trip.html', context)
+    return render(request, 'agencies/list_trips.html', context)

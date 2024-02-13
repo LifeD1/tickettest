@@ -1,0 +1,345 @@
+{% extends 'main.html' %}
+<!-- {% load crispy_forms_tags %}
+{% crispy form form_helper %} -->
+{% load tz %}
+
+{% block title %} Reservation {% endblock %}
+
+
+{% block content %}
+
+<style>
+    .required .form-label:after {
+        content:" *";
+        color:red;
+        }
+</style>
+
+<div class="mx-auto" style="width: 1000px;">
+<h2>Reservation</h2>
+{% if form.errors %}
+    <div class="alert alert-danger">
+        {{ form.errors }}
+    </div>
+{% endif %}
+    <form action="" method="POST">
+
+        {% csrf_token %}
+        
+        <!-- {% crispy form %} -->
+        <div class="row">
+            <div class="col-9 mt-5">
+                <div class="col-4 required">
+                    <label for="id_customer" class="form-label">User Name</label>
+                    {{form.customer}}
+                </div>
+                <div class="row">
+                
+                    <div class="col-4 required">
+                        <label for="id_first_name" class="form-label">First Name</label>
+                        {{form.first_name}}
+                    </div>
+                    <div class="col-4 required">
+                        <label for="id_last_name" class="form-label">Last Name</label>
+                        {{form.last_name}}
+                    </div>
+                    <div class="col-4 required">
+                        <label for="id_id_card" class="form-label">ID Card</label>
+                        {{form.id_card}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 required">
+                        <label for="id_phone" class="form-label">Phone</label>
+                        {{form.phone}}
+                    </div>
+                    <div class="col-4 required">
+                        <label for="id_bus" class="form-label">Bus</label>
+                        {{form.bus}}
+                    </div>
+                    <div class="col-4 required">
+                        <label for="id_agency" class="form-label">Agency</label>
+                        {{form.agency}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 required">
+                        <label for="id_branch" class="form-label">Branch</label>
+                        {{form.branch}}
+                    </div>
+                    <div class="col-4 required">
+                        <label for="id_origin" class="form-label">Origin</label>
+                        <input type="text" value="" name="origin" class="form-control" list="origin-list" id="id_origin" required>
+                        <datalist id="origin-list">
+                            <select name="" id="origin-name">
+                                {% for trip in trips %}
+                                    {% if trip.departure_time.date >= current_date.date %}
+                                        <option value="{{trip.from_origin}}">{{trip.from_origin}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </datalist>
+                    </div>
+                    <div class="col-4 required">
+                        <label for="id_destination" class="form-label">Destination</label>
+                        <input type="text" value="" name="destination" class="form-control" list="destination-list" id="id_destination" required>
+                        <datalist id="destination-list">
+                            <select name="" id="destination-name">
+                                {% for trip in trips %}
+                                    {% if trip.departure_time.date >= current_date.date %}
+                                        <option value="{{trip.to_destination}}">{{trip.to_destination}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </datalist>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 required">
+                        <label for="id_departure_time" class="form-label">Departure Time</label>
+                        <select class="form-select" aria-label="Default select example" id="id_departure_time" name="departure_time" >
+                            <option selected>---------</option>
+                            {% for trip in trips %}
+                                {% if trip.departure_time.date >= current_date.date %}
+                                    <option value="{{trip.departure_time|date:'Y-m-d H:i:s'}}">{{trip.departure_time|date:"M. d, Y, g:i a"}}</option>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            <!-- M. d, Y, g:i a -->
+                          </select>
+        
+                        <!-- {{form.departure_time}} -->
+                    </div>
+                    <div class="col-4 required">
+                        <label for="id_trip_type" class="form-label">Trip Type</label>
+                        {{form.trip_type}}
+                    </div>
+                    <div class="col-4 required">
+                        <label for="id_bus_type" class="form-label">Bus Type</label>
+                        {{form.bus_type}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 required">
+                        <label for="id_number_of_persons" class="form-label">Number of Persons</label>
+                        {{form.number_of_persons}}
+                    </div>
+                    <div class="col-4 required">
+                        <label for="id_seat_number" class="form-label">Seat Number</label>
+                        {{form.seat_number}}
+                    </div>
+                    <div class="col-4 required">
+                        <label for="id_trip_cost" class="form-label">Trip Cost</label>
+                        {{form.trip_cost}}
+                    </div>
+                </div>
+                
+            <br>
+
+            <!-- <input type="submit" name="Register"> -->
+            <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            
+            <div class="col-3">
+                {% include 'customers/layout.html' %}
+            </div>
+        </div>
+        
+       
+    </form>
+    {% if form.is_bound %}
+        <h2>Preview:</h2>
+        {% for field in form %}
+            <strong>{{ field.label }}:</strong> {{ field.value }}<br>
+        {% endfor %}
+    {% endif %}
+</div>
+
+
+<script>
+
+const trip_cost = '{{selectedtrip.trip_cost}}'
+
+const container = document.querySelector('.seatcontainer ');
+const allseats = document.querySelectorAll('.row-seat .seat');
+// const seats = document.querySelectorAll('.row-seat .seat:not(.occupied)');
+const count = document.getElementById('count');
+const total = document.getElementById('total');
+
+
+// console.log(trip_cost)
+populateUI();
+
+
+
+
+// //Update total and count
+function updateSelectedCount() {
+    const selectedSeats = document.querySelectorAll('.row-seat .seat.selected');
+
+    const seatsIndex = [...selectedSeats].map(function (seat) {
+        return [...allseats].indexOf(seat)+1;
+    });
+
+    // const seatsIndex = [...selectedSeats].map(seat => [...allseats].indexOf(seat)+1);
+
+    // console.log(typeof(seat));
+    localStorage.setItem('selectedSeats', JSON.stringify(seatsIndex));
+
+    const selectedSeatsCount = selectedSeats.length;
+
+    // insert into input fields
+    document.getElementById('id_number_of_persons').setAttribute('value', selectedSeatsCount);
+    document.getElementById('id_trip_cost').setAttribute('value', selectedSeatsCount * trip_cost);
+    document.getElementById("id_trip_cost").setAttribute('readonly', true);
+
+
+    var selectedSeatsinp = localStorage.getItem('selectedSeats');
+    selectedSeatsinp = selectedSeatsinp.slice(1,-1)
+    document.getElementById('id_seat_number').setAttribute('value', selectedSeatsinp);
+    document.getElementById("id_seat_number").setAttribute('readonly', true);
+    
+
+}
+
+//get data from localstorage and populate the ui
+function populateUI() {
+    const selectedSeats = JSON.parse(localStorage.getItem('selectedSeats'));
+
+    console.log(selectedSeats)    
+    
+    if (selectedSeats !== null && selectedSeats.length > 0) {
+        allseats.forEach((seat, index)=> {
+          if (selectedSeats.indexOf(index+1) > -1) {
+            // console.log(selectedSeats.indexOf(index+1))
+            seat.classList.add('selected');
+          }
+        });
+    }
+
+    const busLayout = document.getElementById('bus-layout');
+    fetch('/get_booked_seats/')
+        .then(response => response.json())
+        .then(data => {
+            var bookedSeats = data.booked_seats;
+                    console.log(JSON.parse("[" + bookedSeats.join() + "]"))
+            bookedSeats =JSON.parse("[" + bookedSeats.join() + "]")
+            // Assuming your seats are identified by IDs like 'seat-1', 'seat-2', etc.
+            if (bookedSeats !== null && bookedSeats.length > 0) {
+                allseats.forEach((seat, index)=> {
+                if (bookedSeats.indexOf(index+1) > -1) {
+                    // console.log(selectedSeats.indexOf(index+1))
+                    seat.classList.add('occupied');
+                }
+                });
+            }
+                    // bookedSeats.forEach(seatNumber => {
+            //     const occupiedSeat = document.getElementById(`seat-${seatNumber}`);
+            //     if (occupiedSeat) {
+            //         occupiedSeat.classList.add('occupied');
+            //         console.log("occupiedSeat")
+            //     }
+            // });
+        });
+
+}
+
+container.addEventListener('click', (e) => {
+    
+    if(e.target.classList.contains('seat') && !e.target.classList.contains('occupied')) {
+        if(e.target.classList.contains('driver')){
+            return false
+        }else{
+        e.target.classList.toggle('selected');
+        const selectedSeats = document.querySelectorAll('.row-seat .seat.selected');
+        const selectedSeatsCount = selectedSeats.length;
+        // console.log(document.getElementsByClassName('driver'))
+        if (selectedSeatsCount > 3) {
+            e.target.classList.toggle('selected');
+            document.getElementById('alrt').innerHTML='Only 3 seats/booking. <br>Finish and book again for more seats'; 
+            setTimeout(function() {document.getElementById('alrt').innerHTML='';},5000);
+            // alert("you cant only book 3 seats per booking")
+            return false
+        }
+    }
+    }
+
+    updateSelectedCount();
+});
+
+updateSelectedCount();
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const agencySelect = document.getElementById('id_agency');
+    const branchSelect = document.getElementById('id_branch');
+    const originSelect = document.getElementById('id_origin');
+
+        const agencyId = agencySelect.value;
+        // console.log(trip_cost)
+        
+    
+    // populateForm()
+    fetch(`/get_branches/?agency_id=${agencyId}`)
+        .then(response => response.json())
+        .then(data => {
+            branchSelect.innerHTML = '';
+            // Create an empty option element
+            var emptyOption = document.createElement('option');
+            emptyOption.value = ""; // Set value of the option (can be empty string)
+            emptyOption.text = "---------"; 
+            branchSelect.appendChild(emptyOption);
+            data.forEach(branch => {
+                const option = document.createElement('option');
+                option.value = branch.id;
+                option.textContent = branch.name;
+                branchSelect.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching branches:', error));
+    
+    
+});
+
+// script.js
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const agencySelect = document.getElementById('id_agency');
+    const branchSelect = document.getElementById('id_branch');
+
+    agencySelect.addEventListener('change', function () {
+        const agencyId = this.value;
+        
+        if(agencyId){
+            fetch(`/get_branches/?agency_id=${agencyId}`)
+            .then(response => response.json())
+            .then(data => {
+                branchSelect.innerHTML = '';
+                // Create an empty option element
+                var emptyOption = document.createElement('option');
+                emptyOption.value = ""; // Set value of the option (can be empty string)
+                emptyOption.text = "---------"; 
+                branchSelect.appendChild(emptyOption);
+                data.forEach(branch => {
+                    const option = document.createElement('option');
+                    option.value = branch.id;
+                    option.textContent = branch.name;
+                    branchSelect.appendChild(option);
+
+                    
+                });
+            })
+            .catch(error => console.error('Error fetching branches:', error));
+        }
+    });
+});
+
+</script>
+
+
+{% endblock %}

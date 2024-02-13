@@ -1,0 +1,146 @@
+<aside id="sidebar" class="expand">
+    <div class="d-flex">
+        <button id="toggle-btn" type="button">
+            <i class="bi bi-grid"></i>
+        </button>
+        <div class="sidebar-logo">
+            <a href="{% url 'home' %}">
+                {% if request.user.groups.all.0.name == 'agency_admins' %}
+                    Agency Admin
+                {% elif request.user.groups.all.0.name == 'branch_admins' %}
+                    Brandh Admin
+                {% elif request.user.groups.all.0.name == 'ticket_tellers' %}
+                    Ticket Teller
+                {% endif %}
+            </a>
+        </div>
+    </div>
+    <ul class="sidebar-nav">
+        <li class="sidebar-item">
+            <a href="{% url 'home' %}" class="sidebar-link">
+                <i class="bi bi-speedometer"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" data-bs-target="#branch" aria-expanded="false" aria-controls="branch">
+                <i class="bi bi-building"></i>
+                <span>Branches</span>
+            </a>
+            <ul id="branch" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                {% if request.user.groups.all.0.name == 'agency_admins' %}
+                <li class="sidebar-item">
+                    <a href="{% url 'add-branch' %}" class="sidebar-link">Add Branch</a>
+                </li>
+                {% endif %}
+                <li class="sidebar-item">
+                    <a href="{% url 'list-branches' %}" class="sidebar-link">List Branch</a>
+                </li>
+                {% if request.user.groups.all.0.name == 'agency_admins' %}
+                <li class="sidebar-item">
+                    <a href="{% url 'add-branch-admin' %}" class="sidebar-link">Add Branch Admins</a>
+                </li>
+                {% endif %}
+                <li class="sidebar-item">
+                    <a href="{% url 'list-branch-admin' %}" class="sidebar-link">List Branch Admins</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" data-bs-target="#buses" aria-expanded="false" aria-controls="buses">
+                <i class="bi bi-bus-front"></i>
+                <span>Buses</span>
+            </a>
+            <ul id="buses" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                {% if request.user.groups.all.0.name == 'agency_admins' %}
+                <li class="sidebar-item">
+                    <a href="{% url 'add-bus' %}" class="sidebar-link">Add Bus</a>
+                </li>
+                {% endif %}
+                <li class="sidebar-item">
+                    <a href="{% url 'list-buses' %}" class="sidebar-link">List Bus</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" data-bs-target="#drivers" aria-expanded="false" aria-controls="drivers">
+                <i class="bi bi-screwdriver"></i>
+                <span>Drivers</span>
+            </a>
+            <ul id="drivers" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                {% if request.user.groups.all.0.name == 'agency_admins' %}
+                <li class="sidebar-item">
+                    <a href="{% url 'add-driver' %}" class="sidebar-link">Add Driver</a>
+                </li>
+                {% endif %}
+                <li class="sidebar-item">
+                    <a href="{% url 'list-drivers' %}" class="sidebar-link">List Drivers</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" data-bs-target="#trips" aria-expanded="false" aria-controls="trips">
+                <i class="bi bi-map"></i>
+                <span>Trips</span>
+            </a>
+            <ul id="trips" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                {% if request.user.groups.all.0.name == 'agency_admins' or request.user.groups.all.0.name == 'branch_admins' %}
+                <li class="sidebar-item">
+                    <a href="{% url 'add-trip' %}" class="sidebar-link">Add Trips</a>
+                </li>
+                {% endif %}
+                <li class="sidebar-item">
+                    <a href="{% url 'list-trips' %}" class="sidebar-link">List Trips</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" data-bs-target="#tellers" aria-expanded="false" aria-controls="tellers">
+                <i class="bi bi-ticket-detailed"></i>
+                <span>Ticket Tellers</span>
+            </a>
+            <ul id="tellers" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                {% if request.user.groups.all.0.name == 'agency_admins' or equest.user.groups.all.0.name == 'branch_admins' %}
+                <li class="sidebar-item">
+                    <a href="{% url 'add-ticket-teller' %}" class="sidebar-link">Add Ticket Tellers</a>
+                </li>
+                {% endif %}
+                <li class="sidebar-item">
+                    <a href="{% url 'list-tellers' %}" class="sidebar-link">List Ticket Tellers</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" data-bs-target="#reports" aria-expanded="false" aria-controls="reports">
+                <i class="bi bi-list-check"></i>
+                <span>Reports</span>
+            </a>
+            <ul id="reports" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">T</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">B</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link">
+                <i class="lni lni-popup"></i>
+                <span>Profile</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link">
+                <i class="bi bi-gear"></i>
+                <span>Setting</span>
+            </a>
+        </li>
+    </ul>
+    <div class="sidebar-footer">
+        <a href="{% url 'logout' %}" class="sidebar-link">
+            <span>Logout</span>
+        </a>
+    </div>
+</aside>

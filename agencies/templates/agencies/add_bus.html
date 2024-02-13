@@ -1,4 +1,4 @@
-{% extends 'agencies/index.html' %}
+{% extends 'index.html' %}
 {% load crispy_forms_tags %}
 
 {% block title %} Add Bus {% endblock %}
@@ -6,8 +6,8 @@
 
 {% block content %}
 
-<div class="mx-auto" style="width: 600px;">
-<h2>Add Bus</h2>
+<div class="row col-9 mx-auto m-5">
+<h1 class="mb-5">Add Bus</h1>
 
     <form action="" method="POST">
 
@@ -15,7 +15,9 @@
         {{form|crispy}}
         
         <br><br>
-        <input type="submit" name="Submit">
+        <div class="d-md-flex justify-content-md-end">
+            <input type="submit" name="Submit" class="btn" id="buttonad">
+        </div>
     </form>
 </div>
 

@@ -1,4 +1,4 @@
-{% extends 'agencies/index.html' %}
+{% extends 'index.html' %}
 {% load crispy_forms_tags %}
 
 {% block title %} Add Branch Admin {% endblock %}
@@ -6,8 +6,8 @@
 
 {% block content %}
 
-<div class="mx-auto" style="width: 600px;">
-<h2>Add Branch Admin</h2>
+<div class="row col-6 mx-auto m-5">
+<h1>Add Branch Admin</h1><br><br>
 
     <form action="" method="POST">
 
@@ -15,7 +15,9 @@
         {{form|crispy}}
         <!-- <input type="text" class="form-control" value="{{request.user.agency}}" disabled >
         <br><br> -->
-        <input type="submit" name="Submit">
+        <div class="d-md-flex justify-content-md-end">
+            <button type="submit" class="btn"  id="buttonad">Submit</button>
+        </div>
     </form>
 </div>
 

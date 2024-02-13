@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class Agency(models.Model) :
+    id = models.AutoField(primary_key=True, editable=False)
     name = models.CharField(max_length=100)
     reg_num = models.CharField(max_length = 100)
     signup_date = models.DateTimeField(auto_now_add = True)
