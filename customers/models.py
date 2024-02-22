@@ -5,6 +5,7 @@ from sub_admins.models import Agency, Branche, User
 # Create your models here.
 class Reservation(models.Model):
     id = models.AutoField(primary_key=True, editable=False)
+    ticket_number = models.CharField(max_length = 100, null=True)
     customer = models.ForeignKey(User, on_delete = models.SET_NULL, null=True)
     first_name = models.CharField(max_length = 100, null=True)
     last_name = models.CharField(max_length = 100, null=True)

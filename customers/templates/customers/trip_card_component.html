@@ -1,0 +1,20 @@
+{% if trip.departure_time.date >= current_date.date %}
+    <div class="col-lg-4">
+        <div class="card border-success mb-3" style="max-width: 19rem;">
+            <div class="card-header fs-5">{{trip.agency}}</div>
+            <div class="card-body fs-5">
+                <p class="card-text"><i class="bi bi-list-ol"></i>  Trip Number: </p>
+                <p class="card-text text-success"><i class="bi bi-calendar-check"></i>  Trip Date: {{trip.departure_time.date}}</p>
+                <p class="card-text"><i class="bi bi-alarm"></i>  Departure Time: {{trip.departure_time.time}}</p>
+                <p class="card-text"><i class="bi bi-geo"></i>  Departure: {{trip.from_origin}}</p>
+                <p class="text-center text-success"><i class="bi bi-caret-down-fill"></i> </p>
+                <p class="card-text"><i class="bi bi-geo-fill"></i>  Destination: {{trip.to_destination}}</p>
+                <p class="card-text"><i class="bi bi-balloon"></i>  Trip Class: {{trip.bus_type}}</p>
+                <p class="card-text"><i class="bi bi-cash-coin"></i>  Trip Cost: {{trip.trip_cost}}</p>
+                <div class="d-md-flex justify-content-md-center">
+                    <a href="#" class="btn" id="buttonad">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

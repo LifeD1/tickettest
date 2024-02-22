@@ -28,6 +28,7 @@ class Branche(models.Model):
 class User(AbstractUser):
     
     phone = models.CharField(max_length=50, null = True, blank =True)
+    phone_2 = models.CharField(max_length=50, null = True, blank =True)
     id_card = models.CharField(max_length=100, null = True, blank= True)
     gender = models.CharField(
         max_length=6,

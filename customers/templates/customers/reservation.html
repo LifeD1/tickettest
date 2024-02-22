@@ -147,12 +147,7 @@
         
        
     </form>
-    {% if form.is_bound %}
-        <h2>Preview:</h2>
-        {% for field in form %}
-            <strong>{{ field.label }}:</strong> {{ field.value }}<br>
-        {% endfor %}
-    {% endif %}
+    
 </div>
 
 
@@ -169,8 +164,6 @@ const total = document.getElementById('total');
 
 // console.log(trip_cost)
 populateUI();
-
-
 
 
 // //Update total and count

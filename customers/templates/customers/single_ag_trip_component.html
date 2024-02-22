@@ -1,0 +1,8 @@
+
+<div class="row">
+    {% for trip in trips %}
+        {% if agency.name|slugify == trip.agency|slugify %}
+            {% include 'customers/trip_card_component.html' %}
+        {% endif %}
+    {% endfor %}
+</div>

@@ -1,44 +1,66 @@
-{% extends 'sub_admins/index.html' %}
+{% extends 'index.html' %}
 
 {% block title %} Agency List {% endblock %}
 
 
 {% block content %}
 
-<div class="mx-auto" style="width: 800px;">
-<h2>Agency List</h2>
+<div class="row col-9 mx-auto m-5">
+<h2 class="mb-3">Agency List</h2>
 
-<table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Agency</th>
-        <th scope="col">Reg Number</th>
-        <th scope="col">Admin</th>
-      </tr>
-    </thead>
-    <tbody>
-        {% for agency in agencies %}
-        <!-- {{agency.id}} -->
-        <tr>
-            <th scope="row">{{forloop.counter}}</th>
-            
-            <td>{{agency.name}}</td>
-            <td>{{agency.reg_num}}</td>
 
-            {%for a in agencyAdmin %}
-
-                {% if a.agency_id == agency %}
-                    <td>{{ a.username }}</td>
-                {% endif %}
-
-            {% endfor%}
-        </tr>
-        {% endfor %}
-      
-    </tbody>
-  </table>
-
+  {% for agency in agencies %}
+  <div class="accordion" id="accordionExample">
+      <div class="accordion-item">
+      <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{agency.name|cut:' '}}" aria-expanded="true" aria-controls="{{agency.name|cut:' '}}">
+              {{agency.name}}. Reg No: {{agency.reg_num}}
+          </button>
+      </h2>
+      <div id="{{agency.name|cut:' '}}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+              <table class="table table-striped">
+                  <thead>
+                  <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Gender</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Contact</th>
+                      <th scope="col">#</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                      
+                    {%for a in agencyAdmin %}
+                              
+                    {% if a.agency == agency %}
+                      <tr>
+                          
+                          <th scope="row">{{forloop.parentloop.counter}}</th>
+              
+                                      <td>{{ a.first_name }} {{ a.last_name }}</td>
+                                      <td>{{ a.gender }}</td>
+                                      <td>{{ a.email }}</td>
+                                      <td>{{ a.phone }}</td>
+                                      <td>
+                                          <a href="#" class="btn btn-warning">Suspend</a>
+                                          <a href="#" class="btn btn-danger"> <i class="bi bi-x-lg"></i></a>
+                                      </td>
+                                      
+                      </tr>
+                      
+                      {% endif %}
+              
+                      {% endfor%}
+                  
+                  </tbody>
+              </table>
+          </div>
+      </div>
+      </div>
+  </div>
+{% endfor %}
     
 </div>
 

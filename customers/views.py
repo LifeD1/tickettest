@@ -1,4 +1,5 @@
-import json
+# import json
+import itertools
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from agencies.models import Trip
@@ -8,7 +9,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from customers.models import Reservation
-from sub_admins.models import Branche, User
+from sub_admins.models import Agency, Branche, User
 from django.utils import timezone
 
 # Create your views here.
@@ -60,7 +61,7 @@ def userLogout(request):
 def dashboard(request):
     if request.user.groups.filter(name='sub_admins').exists():
 
-        return render(request, 'sub_admins/index.html')
+        return render(request, 'sub_admins/sub_admins_dashboard.html')
     elif request.user.groups.filter(name='agency_admins').exists():
         return render(request, 'agencies/agency_admins_dashbord.html')
     elif request.user.groups.filter(name='branch_admins').exists():
@@ -76,7 +77,7 @@ def dashboard(request):
 
 def customerDashbaord(request):
     
-    return render(request, 'customers/customer-dashboard.html')
+    return render(request, 'customers/customer_dashboard.html')
 
 
 def get_branches(request):
@@ -94,27 +95,65 @@ def get_booked_seats(request):
     booked_seats = Reservation.objects.values_list('seat_number', flat=True)
     return JsonResponse({'booked_seats': list(booked_seats)})
 
+
+
+def ticketNumber(request):
+    current_date = timezone.now()
+    date_str = str(current_date.date()).replace("-","")
+    selectedtrip = Trip.objects.get(trip_id = 1)
+    agency = str(selectedtrip.agency)
+    
+    a_first_letters_list=[word[0] for word in agency.split()]
+    a_first_letter = ''.join(map(str, a_first_letters_list))
+    prifix = a_first_letter + date_str
+
+    zfillprifix = "-"
+    zfillprifix = zfillprifix.zfill(4)
+    prifix = prifix+zfillprifix
+
+    # print(prifix)
+
+    last_record = Reservation.objects.filter(ticket_number__contains = a_first_letter).last()
+
+    # new_tick_num = ''
+    if last_record:
+        #do somethin
+        ticket_num = last_record.ticket_number
+        #getting value after -
+        suf = ticket_num.partition('-')[2]
+        #removing leading zeros and increasing it by 1
+        sufint = int(suf.lstrip('0')) + 1
+        # concatinating with prefix to get new number
+        new_tick_num = prifix+str(sufint)
+    else:
+        #start ticket number from 1
+        new_tick_num = prifix+'1'
+    return new_tick_num
+
+   
+
+
 def ticketReservation(request):
     # trips = None
     # current_date = None
     # selectedtrip = None
+    ticket_num = ticketNumber(request)
     
     trips = Trip.objects.all()
-    current_date = timezone.now() 
+    current_date = timezone.now()
     selectedtrip = Trip.objects.get(trip_id = 1)
-    form = ReservationForm(request.POST or None)
+
+    form = ReservationForm(request.POST)
     if request.method == 'POST':
         form = ReservationForm(request.POST)
 
         # print (request.POST('first_name'))
         if form.is_valid():
-            print('good')
-            form.save()
+            reserve = form.save(commit=False)
+            reserve.ticket_number = ticket_num
+            reserve.save()
             return redirect('dashboard')
     else:
-        
-        
-        # print(trip)
         
         bus = selectedtrip.bus
         bus_type = selectedtrip.bus_type
@@ -141,3 +180,37 @@ def ticketReservation(request):
         # form.fields['branch'].queryset = Branche.objects.filter(agency=request.user.agency)
     context = {'form': form, 'trips': trips, 'current_date': current_date, 'selectedtrip':selectedtrip}
     return render(request, 'customers/reservation.html', context)
+
+
+def listAllAvTrips(request):
+    trips = Trip.objects.all()
+    current_date = timezone.now()
+
+    context = {'trips': trips, 'current_date': current_date}
+    return render(request, 'customers/av_trips.html', context)
+
+
+def listAvTripsOnAgency(request):
+    trips = Trip.objects.all()
+    agencies = Agency.objects.all()
+    current_date = timezone.now()
+
+    context = {'trips': trips, 'current_date': current_date, 'agencies':agencies}
+    return render(request, 'customers/av_trips_per_agency.html', context)
+
+def listcustAgencies(request):
+    agencies = Agency.objects.all()
+    trips = Trip.objects.all()
+    current_date = timezone.now()
+    
+    context = {'agencies':agencies, 'current_date': current_date, 'trips': trips}
+    return render(request, 'customers/list_agencies.html', context)
+
+
+def singleAgPage(request, pk):
+    agency = Agency.objects.get(id = pk)
+    trips = Trip.objects.all()
+    current_date = timezone.now()
+
+    context = {'agency': agency, 'trips':trips, 'current_date': current_date}
+    return render(request, 'customers/single_agency_trip.html', context )

@@ -34,7 +34,7 @@ def createAgencyAdmin(request):
         form = AddAgencyAdminForm()
 
     context ={'form':form}
-    return render(request, 'sub_admins/add_agency.html', context)
+    return render(request, 'sub_admins/add_agency_admin.html', context)
 
 def agencyList(request):
     agencies = Agency.objects.all()

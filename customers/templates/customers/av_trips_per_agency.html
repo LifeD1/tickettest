@@ -1,0 +1,43 @@
+
+{% extends 'index.html' %}
+
+{% block title %} List Trip Agencies {% endblock %}
+
+
+{% block content %}
+
+<div class="row col-11 mx-auto m-5">
+    <h1>List Trip Agencies</h1>
+
+
+{% for agency in agencies %}
+    
+    <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{agency.name|cut:' '}}" aria-expanded="true" aria-controls="{{agency.name|cut:' '}}">
+                {{agency.name}}
+            </button>
+        </h2>
+        <div id="{{agency.name|cut:' '}}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                
+                <div class="row">
+                    {% for trip in trips %}
+                        {% if agency.name|slugify == trip.agency|slugify %}
+                            {% include 'customers/trip_card_component.html' %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+{% endfor %}
+    
+</div>
+
+
+
+
+{% endblock %}

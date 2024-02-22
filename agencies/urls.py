@@ -17,5 +17,6 @@ urlpatterns = [
     path('add-trip', views.addTrip, name='add-trip'),
     path('list-trips', views.listTrip, name='list-trips'),
     path('not_authorized', views.restricted, name='not_authorized'),
+    path('user-profile/<str:pk>/', views.userProfile, name='user-profile'),
     # path('customers/', include(('customers.urls', 'customers'), namespace='customers') ),
 ]

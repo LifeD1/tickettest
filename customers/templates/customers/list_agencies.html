@@ -1,0 +1,37 @@
+{% extends 'index.html' %}
+
+{% block title %} List Agencies {% endblock %}
+
+
+{% block content %}
+
+
+<div class="row col-11 mx-auto m-5">
+    <h1>List Agencies</h1>
+
+
+    <div class="row">
+            {% for agency in agencies %}
+                <div class="col-4">
+                    <a href="{% url 'single-ag' agency.id %}" style="color: black;">
+                        <div class="card border-success mb-3" style="max-width: 19rem;">
+                            <div class="card-header fs-5">{{agency.name}}</div>
+                            <div class="card-body fs-5">
+                                {% for trip in trips %}
+                                    {% if agency.name|slugify == trip.agency|slugify %}
+                                        {% if trip.departure_time.date >= current_date.date %}
+                                            <p class="card-text">{{trip.departure_time.date}}</p>
+                                            <p class="card-text">{{agency.id}}</p>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

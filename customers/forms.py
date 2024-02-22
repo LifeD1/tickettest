@@ -77,4 +77,5 @@ class ReservationForm(ModelForm):
     class Meta:
         model = Reservation
         fields = '__all__'
+        exclude = ('ticket_number',)
         # fields = ['first_name', 'last_name', 'id_card', 'customer','origin']

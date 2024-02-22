@@ -19,10 +19,9 @@ def group_check(user):
     # else:
     #     return HttpResponse("You are not authorized to view this page.", status=403)
     if user.groups.filter(name='agency_admins').exists():
-        print(user.groups)
         return True
 
-@login_required
+@login_required(redirect_field_name='login', login_url='login')
 @user_passes_test(group_check, login_url='not_authorized')  
 def createAgencyBranch(request):
     uagency = request.user.agency
@@ -40,7 +39,10 @@ def createAgencyBranch(request):
     context = {'form':form}
     return render(request, 'agencies/add_branch.html', context)
 
-
+def userProfile(request, pk):
+    user = User.objects.get(id=pk)
+    context ={'user':user}
+    return render(request, 'profile.html', context)
 
 def createAgencyBranchAdmin(request):
     uagency = request.user.agency

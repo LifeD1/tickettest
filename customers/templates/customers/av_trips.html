@@ -1,0 +1,16 @@
+{% extends 'index.html' %}
+
+{% block title %} Customer Dashboard {% endblock %}
+
+
+{% block content %}
+<div class="row col-11  mx-auto mt-5 mb-5">
+    <h1 class="mt-4 mb-5 text-center">All Available trips</h1>
+    <div class="row">
+        {% for trip in trips %}
+                {% include 'customers/trip_card_component.html' %}
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

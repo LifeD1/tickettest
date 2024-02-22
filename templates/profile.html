@@ -1,0 +1,88 @@
+{% extends 'index.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Add Branch Admin {% endblock %}
+
+
+{% block content %}
+
+<div class="row col-9 mx-auto m-5">
+    <div class="row">
+        <div class="col-4 mt-4">
+            <div class="card">
+                <div class="d-flex flex-column justify-content-md-center align-items-center mt-4" id="mini-profile">
+                    <div class="profile-image text-center" id="profile-page-image">
+                        <i class="bi bi-person-fill mx-auto d-block pimg"></i>
+                    </div>
+                    
+                </div>
+                <div class="card-body text-center">
+                    <div class="mt-3" id="user-info">
+                        <p class="fw-bold fs-4">{{user.username |capfirst}}</p>
+                        <p>Post: 
+                            {% if request.user.groups.all.0.name == 'agency_admins' %}
+                                Agency Admin
+                            {% elif request.user.groups.all.0.name == 'branch_admins' %}
+                                Brandh Admin
+                            {% elif request.user.groups.all.0.name == 'ticket_tellers' %}
+                                Ticket Teller
+                            {% endif %}
+                        </p>
+                        <a href="#" class="btn" id="buttonad">Edit Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8 mt-4">
+            <div class="card card-body fs-5">
+                <table class="table">
+                    <tbody>
+                      <tr>
+                        <td>First Name:</td>
+                        <td>{{user.first_name}}</td>
+                      </tr>
+                      <tr>
+                        <td>Last Name:</td>
+                        <td>{{user.last_name}}</td>
+                      </tr>
+                      <tr>
+                        <td>Gender:</td>
+                        <td>{{user.gender}}</td>
+                      </tr>
+                      <tr>
+                        <td>Email:</td>
+                        <td>{{user.email}}</td>
+                      </tr>
+                      <tr>
+                        <td>Contact:</td>
+                        <td>{{user.phone}}{% if request.user.phone_2 != '' and request.user.phone_2 != None %}  / {{user.phone_2}} {% endif %}</td>
+                      </tr>
+                      {% if request.user.id_card %}
+                      <tr>
+                        <td>ID Card Number:</td>
+                        <td>{{user.id_card}}</td>
+                      </tr>
+                      {% endif %}
+                      {% if request.user.agency != '' and request.user.agency != None%}
+                      <tr>
+                        <td>Agency:</td>
+                        <td>{{user.agency}}</td>
+                      </tr>
+                      {% endif %}
+                      {% if request.user.branch %}
+                      <tr>
+                        <td>Branch:</td>
+                        <td>{{user.branch}}</td>
+                      </tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
